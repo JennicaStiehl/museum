@@ -39,15 +39,17 @@ class Museum
     new_hash = {}
     patrons = []
     @exhibits.each do |exhibit|
-      @patrons.find_all do |patron|
+      @patrons.each do |patron|
         # patron.interests.each do |interest|
           # binding.pry
          if patron.interests.include?(exhibit.name)
            patrons << patron
+           new_hash[exhibit] = patrons.uniq
          else
-           patrons
+           # patrons
+           new_hash[exhibit] = []
+
         end
-        new_hash[exhibit] = patrons.uniq
       end
     end
     new_hash
