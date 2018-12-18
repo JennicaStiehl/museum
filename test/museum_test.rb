@@ -97,10 +97,5 @@ class MuseumTest < Minitest::Test
         imax => []
     })
     assert_equal expected, dmns.patrons_by_exhibit_interest
-    # {
-    #   #<Exhibit:0x00007fb202238618...> => [#<Patron:0x00007fb2011455b8...>],
-    #   #<Exhibit:0x00007fb202248748...> => [#<Patron:0x00007fb2011455b8...>, #<Patron:0x00007fb20227f8b0...>],
-    #   #<Exhibit:0x00007fb20225f8d0...> => []
-    # }
   end
 end
