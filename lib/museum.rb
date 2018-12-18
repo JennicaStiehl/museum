@@ -1,6 +1,7 @@
 class Museum
   attr_reader   :name,
-                :exhibits
+                :exhibits,
+                :patrons
 
   def initialize(name)
     @name = name
@@ -13,7 +14,7 @@ class Museum
   end
 
   def recommend_exhibits(name)
-    add_patron(name)
+    admit(name)
     recommendations = []
     @exhibits.each do |exhibit|
       @patrons.each do |patron|
@@ -27,7 +28,7 @@ class Museum
     recommendations
   end
 
-  def add_patron(name)
+  def admit(name)
     @patrons << name
   end
 end
