@@ -9,79 +9,59 @@ class Museum
     @name = name
     @exhibits = []
     @patrons = []
+    @revenue = 0
   end
 
   def add_exhibit(name)
     @exhibits << name
   end
 
-  def recommend_exhibits(name)
-    admit(name)
-    recommendations = []
-    @exhibits.each do |exhibit|
-      @patrons.each do |patron|
-        patron.interests.each do |interest|
-          if interest == exhibit.name
-            recommendations << exhibit
-          end
-        end
+  def interested_patrons(exhibit)
+    @patrons.find_all do |patron|
+      patron.interests.include?(exhibit.name)
+    end
+  end
+
+  def find_affordable_exhibits(name)
+    @exhibits.reverse.find_all do |exhibit|
+      name.spending_money >= exhibit.cost
+    end
+  end
+
+  def recommend_exhibits(patron)
+    exhibits = find_affordable_exhibits(patron)
+    exhibits.find_all do |exhibit|
+      patron.interests.include?(exhibit.name)
+    end
+  end
+
+  def admit_exhibits(name)
+    exhibits = recommend_exhibits(name)
+    exhibits.reverse.each do |exhibit|
+      if name.spending_money >= exhibit.cost
+        name.spending_money -= exhibit.cost
+        @revenue += exhibit.cost
+        name.visited_exhibits << exhibit.name
       end
     end
-    recommendations
   end
 
   def admit(name)
+    admit_exhibits(name)
     @patrons << name
   end
 
-  def patrons_by_exhibit_interest
-    # patrons_by_interest
+  def patrons_of_exhibits
     new_hash = {}
-    patrons = []
     @exhibits.each do |exhibit|
-      @patrons.each do |patron|
-        # patron.interests.each do |interest|
-          # binding.pry
-         if patron.interests.include?(exhibit.name)
-           patrons << patron
-           new_hash[exhibit] = patrons.uniq
-         else
-           # patrons
-           new_hash[exhibit] = []
-
-        end
+      patrons = interested_patrons(exhibit)
+        new_hash[exhibit] = patrons.uniq
       end
+      new_hash
     end
-    new_hash
-  end
 
-  # def patrons_by_interest
-  #   patrons = []
-  #   @patrons.find_all do |patron|
-  #     patron.interests.each do |interest|
-  #     if interest == exhibit.name
-  #       patrons << patron
-  #     end
-  #   end
-  #   patrons
-  # end
+    def revenue
+      @revenue
+    end
 
 end
-# def patrons_by_exhibit_interest
-#   new_hash = {}
-#   patrons = []
-#   @exhibits.each do |exhibit|
-#     @patrons.each do |patron|
-#       patron.interests.each do |interest|
-#         if interest == exhibit.name
-#           patrons << patron
-#           new_hash[exhibit] = patrons.uniq
-#         else
-#           new_hash[exhibit] = []
-#           binding.pry
-#         end
-#       end
-#     end
-#   end
-#   new_hash
-# end
